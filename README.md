@@ -8,5 +8,5 @@
 |--|--|
 |.\venv\Scripts\activate|source venv/bin/activate|
 
-3. Install dependencies from venv with `pip install -r requirements.txt`
+3. Install dependencies from venv with `pip install notebook`
 4. Run notebook with jupyter notebook
