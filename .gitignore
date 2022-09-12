@@ -1,7 +1,7 @@
 /venv
 /venv_382
 /venv_ub
-/Toyota_Smarthome
+/Toyota_Smarthome/pipline/data/TSU_RGB_i3d_feat
 ./ipynb_checkpoints
 .ipynb_checkpoints
 .DS_Store
