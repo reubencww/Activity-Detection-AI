@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 /venv
 /venv_382
 /venv_ub
 /Toyota_Smarthome
 /.ipynb_checkpoints
+=======
+/venv
+/venv_382
+/venv_ub
+/Toyota_Smarthome
+./ipynb_checkpoints
+>>>>>>> c05251a (TEAM01-6 ensuring python ver)
