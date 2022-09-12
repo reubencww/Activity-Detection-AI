@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /venv
 /venv_382
 /venv_ub
@@ -11,3 +12,12 @@
 /Toyota_Smarthome
 ./ipynb_checkpoints
 >>>>>>> c05251a (TEAM01-6 ensuring python ver)
+=======
+/venv
+/venv_382
+/venv_ub
+/Toyota_Smarthome
+./ipynb_checkpoints
+.ipynb_checkpoints
+.DS_Store
+>>>>>>> 1fd6351 (Update .gitignore)
