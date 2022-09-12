@@ -14,5 +14,6 @@ python ./Toyota_Smarthome/pipline/train.py \
 -APtype map \
 -epoch 140 \
 -batch_size 2 \
--comp_info TSU_CS_RGB_PDAN
+-comp_info TSU_CS_RGB_PDAN \
+-data $2 \
 
