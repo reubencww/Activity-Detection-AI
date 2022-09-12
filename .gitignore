@@ -3,3 +3,5 @@
 /venv_ub
 /Toyota_Smarthome
 ./ipynb_checkpoints
+.ipynb_checkpoints
+.DS_Store
