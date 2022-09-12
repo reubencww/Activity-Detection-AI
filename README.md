@@ -15,3 +15,6 @@
 1. Ensure that node version is 16.x
 2. In jupyter env, type `jupyter labextension install @jupyter-widgets/jupyterlab-manager`
 3. Import in notebook
+
+## Data files
+1. add TSU_RGB_i3d_feat into /pipline/data/
