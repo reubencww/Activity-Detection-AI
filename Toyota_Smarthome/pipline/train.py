@@ -37,6 +37,7 @@ parser.add_argument('-batch_size', type=str, default='False')
 parser.add_argument('-kernelsize', type=str, default='False')
 parser.add_argument('-feat', type=str, default='False')
 parser.add_argument('-split_setting', type=str, default='CS')
+parser.add_argument('-data', type=str, default='.')
 args = parser.parse_args()
 
 import torch
@@ -95,7 +96,7 @@ if args.dataset == 'TSU':
         train_split = './data/smarthome_CV_51.json'
         test_split = './data/smarthome_CV_51.json'
     
-    rgb_root = './Toyota_Smarthome/pipline/data/TSU_RGB_i3d_feat/RGB_i3d_16frames_64000_SSD/'
+    rgb_root = args.data
     skeleton_root='/skeleton/feat/Path/' # 
 
 def sigmoid(x):
