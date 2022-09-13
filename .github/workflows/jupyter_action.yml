@@ -44,5 +44,5 @@ jobs:
 
       - id: jupyter 
         name: Jupyter Notebook Execution
-        run: jupyter execute download.ipynb
+        run: jupyter execute ML_Tool.ipynb
         shell: bash 
