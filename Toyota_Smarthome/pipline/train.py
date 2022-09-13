@@ -38,6 +38,7 @@ parser.add_argument('-kernelsize', type=str, default='False')
 parser.add_argument('-feat', type=str, default='False')
 parser.add_argument('-split_setting', type=str, default='CS')
 parser.add_argument('-data', type=str, default='.')
+parser.add_argument('-newModel', type=str, default='')
 args = parser.parse_args()
 
 import torch
@@ -169,7 +170,7 @@ def run(models, criterion, num_epochs=50):
                 #torch.save(model,'./'+str(args.model)+'/model_epoch_'+str(args.lr)+'_'+str(epoch))
                 #print('save here:','./'+str(args.model)+'/weight_epoch_'+str(args.lr)+'_'+str(epoch))
 
-    torch.save(model, './' + str(args.model))
+    torch.save(model, './trained_model' + str(args.newModel))
 
 def eval_model(model, dataloader, baseline=False):
     results = {}
