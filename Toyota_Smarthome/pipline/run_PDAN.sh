@@ -12,8 +12,9 @@ python ./Toyota_Smarthome/pipline/train.py \
 -lr 0.0002 \
 -kernelsize 3 \
 -APtype map \
--epoch 140 \
--batch_size 2 \
+-epoch ${3:-1} \
+-batch_size ${4:-1} \
 -comp_info TSU_CS_RGB_PDAN \
 -data $2 \
+-newModel ${5:-.}
 
