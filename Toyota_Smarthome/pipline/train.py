@@ -169,6 +169,8 @@ def run(models, criterion, num_epochs=50):
                 #torch.save(model,'./'+str(args.model)+'/model_epoch_'+str(args.lr)+'_'+str(epoch))
                 #print('save here:','./'+str(args.model)+'/weight_epoch_'+str(args.lr)+'_'+str(epoch))
 
+    torch.save(model, './' + str(args.model))
+
 def eval_model(model, dataloader, baseline=False):
     results = {}
     for data in dataloader:
