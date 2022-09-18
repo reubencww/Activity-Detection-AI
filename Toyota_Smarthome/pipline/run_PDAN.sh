@@ -16,6 +16,6 @@ python ./Toyota_Smarthome/pipline/train.py \
 -batch_size ${4:-1} \
 -comp_info TSU_CS_RGB_PDAN \
 -data $1 \
--load_model ${2:-'false'} \
--save_model ${5}
+-load_model ${2:-'False'} \
+-save_model ${5:-'./'}
 
