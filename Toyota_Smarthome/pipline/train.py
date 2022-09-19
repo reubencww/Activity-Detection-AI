@@ -345,3 +345,19 @@ if __name__ == '__main__':
         lr_sched = optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.5, patience=8, verbose=True)
         run([(model, 0, dataloaders, optimizer, lr_sched, args.comp_info)], criterion, num_epochs=int(args.epoch))
         print("10")
+
+    else:
+      print ("evaluation...")
+      model = torch.load(args.load_model)
+      model.cuda()
+      dataloaders, datasets = load_data('', test_split, rgb_root)
+      results = eval_model(model, dataloaders['val'], baseline=True)
+
+      rapm = APMeter()
+
+      for vid in results.keys():
+        o,p,l,fps = results[vid]
+        rapm.add(sigmoid(o), l)
+      
+      print ("rgb MAP: ", rapm.value().mean())
+      print ("rgb per vid: ", rapm.value())

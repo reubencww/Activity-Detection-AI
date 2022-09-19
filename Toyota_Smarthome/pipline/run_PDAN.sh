@@ -7,7 +7,7 @@ python ./Toyota_Smarthome/pipline/train.py \
 -mode rgb \
 -split_setting CS \
 -model PDAN \
--train True \
+-train ${6:-'False'} \
 -num_channel 512 \
 -lr 0.0002 \
 -kernelsize 3 \
