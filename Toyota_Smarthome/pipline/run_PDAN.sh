@@ -7,15 +7,15 @@ python ./Toyota_Smarthome/pipline/train.py \
 -mode rgb \
 -split_setting CS \
 -model PDAN \
--train ${6:-'False'} \
+-train ${3:-'False'} \
 -num_channel 512 \
 -lr 0.0002 \
 -kernelsize 3 \
 -APtype map \
--epoch ${3:-1} \
--batch_size ${4:-1} \
+-epoch ${4:-1} \
+-batch_size ${5:-1} \
 -comp_info TSU_CS_RGB_PDAN \
 -data $1 \
 -load_model ${2:-'False'} \
--save_model ${5:-'./'}
+-save_model ${6:-'./'}
 
