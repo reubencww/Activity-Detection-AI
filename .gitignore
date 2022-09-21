@@ -3,6 +3,7 @@
 /venv
 /venv_382
 /venv_ub
+<<<<<<< HEAD
 /Toyota_Smarthome
 /.ipynb_checkpoints
 =======
@@ -21,3 +22,13 @@
 .ipynb_checkpoints
 .DS_Store
 >>>>>>> 1fd6351 (Update .gitignore)
+=======
+/test
+/Toyota_Smarthome/pipline/data/TSU_RGB_i3d_feat
+/Toyota_Smarthome/pipline/data/TSU_3DPose_AGCN_feat
+/data
+./ipynb_checkpoints
+.ipynb_checkpoints
+.DS_Store
+/video_withcaptions/*
+>>>>>>> 3f401f3 (TEAM01-8 video output with captions)
