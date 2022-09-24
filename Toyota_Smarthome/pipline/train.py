@@ -156,13 +156,18 @@ def run(models, criterion, num_epochs=50):
     for epoch in range(num_epochs):
         #print('Epoch {}/{}'.format(epoch, num_epochs - 1))
         #print('-' * 10)
-
+        print("epoch: ", epoch)
         probs = []
         for model, gpu, dataloader, optimizer, sched, model_file in models:
-            #train_map, train_loss = train_step(model, optimizer, dataloader['train'], epoch)
+            train_map, train_loss = train_step(model, optimizer, dataloader['train'], epoch)
             prob_val, val_loss, val_map = val_step(model, gpu, dataloader['val'], epoch)
             probs.append(prob_val)
             sched.step(val_loss)
+            #print("trainMap: ", train_map)
+            print("trainLoss: ", train_loss)
+            print("probVal: ", prob_val)
+            print("valLoss: ", val_loss)
+            #print("valMap: ", val_map)
 
             if best_map < val_map:
                 best_map = val_map
