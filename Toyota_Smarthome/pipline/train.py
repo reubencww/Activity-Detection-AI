@@ -27,7 +27,7 @@ parser.add_argument('-rgb_root', type=str, default='no_root')
 parser.add_argument('-flow_root', type=str, default='no_root')
 parser.add_argument('-type', type=str, default='original')
 parser.add_argument('-lr', type=str, default='0.1')
-parser.add_argument('-epoch', type=str, default='50')
+parser.add_argument('-epoch', type=str, default='1')
 parser.add_argument('-model', type=str, default='')
 parser.add_argument('-APtype', type=str, default='wap')
 parser.add_argument('-randomseed', type=str, default='False')
@@ -38,6 +38,7 @@ parser.add_argument('-kernelsize', type=str, default='False')
 parser.add_argument('-feat', type=str, default='False')
 parser.add_argument('-split_setting', type=str, default='CS')
 parser.add_argument('-data', type=str, default='.')
+parser.add_argument('-save_model', type=str, default='')
 args = parser.parse_args()
 
 import torch
@@ -63,7 +64,6 @@ torch.cuda.manual_seed_all(SEED)
 random.seed(SEED)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
-print('Random_SEED!!!:', SEED)
 
 from torch.optim import lr_scheduler
 from torch.autograd import Variable
@@ -152,24 +152,30 @@ def run(models, criterion, num_epochs=50):
     since = time.time()
 
     best_map = 0.0
+    print('Training of the model begins')
     for epoch in range(num_epochs):
-        print('Epoch {}/{}'.format(epoch, num_epochs - 1))
-        print('-' * 10)
-
+        #print('Epoch {}/{}'.format(epoch, num_epochs - 1))
+        #print('-' * 10)
+        print("epoch: ", epoch)
         probs = []
         for model, gpu, dataloader, optimizer, sched, model_file in models:
             train_map, train_loss = train_step(model, optimizer, dataloader['train'], epoch)
             prob_val, val_loss, val_map = val_step(model, gpu, dataloader['val'], epoch)
             probs.append(prob_val)
             sched.step(val_loss)
+            #print("trainMap: ", train_map)
+            print("trainLoss: ", train_loss)
+            print("probVal: ", prob_val)
+            print("valLoss: ", val_loss)
+            #print("valMap: ", val_map)
 
             if best_map < val_map:
                 best_map = val_map
                 #torch.save(model.state_dict(),'./'+str(args.model)+'/weight_epoch_'+str(args.lr)+'_'+str(epoch))
                 #torch.save(model,'./'+str(args.model)+'/model_epoch_'+str(args.lr)+'_'+str(epoch))
                 #print('save here:','./'+str(args.model)+'/weight_epoch_'+str(args.lr)+'_'+str(epoch))
-
-    torch.save(model, './' + str(args.model))
+    if args.load_model == "False":
+        torch.save(model, str(args.save_model))
 
 def eval_model(model, dataloader, baseline=False):
     results = {}
@@ -182,7 +188,7 @@ def eval_model(model, dataloader, baseline=False):
     return results
 
 
-def run_network(model, data, epoch=0, baseline=False):
+def run_network(model, data, gpu, epoch=0, baseline=False):
     inputs, mask, labels, other = data
     # wrap them in Variable
     inputs = Variable(inputs.cpu())
@@ -202,9 +208,9 @@ def run_network(model, data, epoch=0, baseline=False):
     outputs_final = activation
     #print('OUTPUTS_FINAL', outputs_final.size())
     
-    if args.model=="./trained_model/PDAN_TSU_RGB":
+    if args.model=="PDAN":
         # print('outputs_final1', outputs_final.size())
-        outputs_final = outputs_final[-1]
+        outputs_final = outputs_final[:,0,:,:]
         #print('OUTPUTS_FINAL', outputs_final.size())
     # print('outputs_final',outputs_final.size())
     outputs_final = outputs_final.permute(0, 2, 1)  
@@ -263,7 +269,7 @@ def val_step(model, gpu, dataloader, epoch):
         num_iter += 1
         other = data[3]
 
-        outputs, loss, probs, err = run_network(model, data, epoch)
+        outputs, loss, probs, err = run_network(model, data, gpu, epoch)
 
         apm.add(probs.data.cpu().numpy()[0], data[2].numpy()[0])
 
@@ -286,10 +292,10 @@ def val_step(model, gpu, dataloader, epoch):
 
 
 if __name__ == '__main__':
-    print(str(args.model))
-    print('batch_size:', batch_size)
-    print('cuda_avail', torch.cuda.is_available())
-
+    #print(str(args.model))
+    #print('batch_size:', batch_size)
+    #print('cuda_avail', torch.cuda.is_available())
+    print("1")
     if args.mode == 'flow':
         print('flow mode', flow_root)
         dataloaders, datasets = load_data(train_split, test_split, flow_root)
@@ -297,10 +303,12 @@ if __name__ == '__main__':
         print('Pose mode', skeleton_root)
         dataloaders, datasets = load_data(train_split, test_split, skeleton_root)
     elif args.mode == 'rgb':
-        print('RGB mode', rgb_root)
+        print("2")
+        #print('RGB mode', rgb_root)
         dataloaders, datasets = load_data(train_split, test_split, rgb_root)
 
     if args.train:
+        print("3")
         num_channel = args.num_channel
         if args.mode == 'skeleton':
             input_channnel = 256
@@ -310,8 +318,9 @@ if __name__ == '__main__':
         num_classes = classes
         mid_channel=int(args.num_channel)
 
-        if args.model=="./trained_model/PDAN_TSU_RGB":
-            print("you are processing PDAN_TSU_RGB")
+        if args.model=="PDAN":
+            print("4")
+            #print("you are processing PDAN_TSU_RGB")
             from models import PDAN as Net
             model = Net(num_stages=1, num_layers=5, num_f_maps=mid_channel, dim=input_channnel, num_classes=classes)
 
@@ -320,7 +329,8 @@ if __name__ == '__main__':
 
         if args.load_model!= "False":
             # entire model
-            model = torch.load(args.load_model)
+            print("5")
+            model = torch.load(args.load_model, map_location=torch.device('cpu'))
             # weight
             # model.load_state_dict(torch.load(str(args.load_model)))
             print("loaded",args.load_model)
@@ -328,14 +338,31 @@ if __name__ == '__main__':
         pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
         print('pytorch_total_params', pytorch_total_params)
         print('num_channel:', num_channel, 'input_channnel:', input_channnel,'num_classes:', num_classes)
+        print("6")
         model.cpu()
-
+        print("7")
         criterion = nn.NLLLoss(reduce=False)
+        print("8")
         lr = float(args.lr)
         print(lr)
         optimizer = optim.Adam(model.parameters(), lr=lr)
+        print("9")
         lr_sched = optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.5, patience=8, verbose=True)
         run([(model, 0, dataloaders, optimizer, lr_sched, args.comp_info)], criterion, num_epochs=int(args.epoch))
+        print("10")
 
+    else:
+      print ("evaluation...")
+      model = torch.load(args.load_model)
+      model.cuda()
+      dataloaders, datasets = load_data('', test_split, rgb_root)
+      results = eval_model(model, dataloaders['val'], baseline=True)
 
+      rapm = APMeter()
 
+      for vid in results.keys():
+        o,p,l,fps = results[vid]
+        rapm.add(sigmoid(o), l)
+      
+      print ("rgb MAP: ", rapm.value().mean())
+      print ("rgb per vid: ", rapm.value())
